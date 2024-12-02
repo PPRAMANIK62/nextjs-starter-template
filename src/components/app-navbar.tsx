@@ -14,6 +14,8 @@ import {
 } from "@nextui-org/react";
 import { Package } from "lucide-react";
 
+import { ThemeSwitcher } from "./theme-switcher";
+
 export default function AppNavbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
@@ -49,6 +51,9 @@ export default function AppNavbar() {
             </Link>
           </NavbarItem>
         ))}
+        <NavbarMenuItem>
+          <ThemeSwitcher />
+        </NavbarMenuItem>
       </NavbarContent>
       <NavbarMenu>
         {menuItems.map((item, index) => (
@@ -58,6 +63,9 @@ export default function AppNavbar() {
             </Link>
           </NavbarMenuItem>
         ))}
+        <NavbarMenuItem>
+          <ThemeSwitcher />
+        </NavbarMenuItem>
       </NavbarMenu>
     </Navbar>
   );
