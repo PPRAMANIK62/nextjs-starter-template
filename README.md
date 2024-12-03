@@ -52,3 +52,16 @@ next.config.ts
 ```
 import "./src/env/server.ts";
 ```
+
+#### Other dependencies
+
+```bash
+bun install -D eslint-plugin-n
+```
+
+.eslintrc.json
+
+```
+"plugins": ["n", ...],
+"n/no-process-env": ["error"],
+```
