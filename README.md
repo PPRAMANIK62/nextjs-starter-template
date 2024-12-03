@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Setup Typesafe environment variables
 
-## Getting Started
+It uses [T3 env](env.t3.gg) package for this setup. This package provides a simple way to define environment variables validation for your app.
 
-First, run the development server:
+### Installation
+
+#### 1. Install dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install @t3-oss/env-core zod
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### 2. Create your schema
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+While defining both the client and server schemas in a single file provides the best developer experience, it also means that your validation schemas for the server variables will be shipped to the client. If you consider the names of your variables sensitive, you should split your schemas into two files.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+src/env/server.ts
 
-## Learn More
+```
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
-To learn more about Next.js, take a look at the following resources:
+export const env = createEnv({
+  server: {
+    NODE_ENV: z.enum(["development", "production"]),
+  },
+  emptyStringAsUndefined: true,
+  experimental__runtimeEnv: process.env,
+});
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+src/env/client.ts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
-## Deploy on Vercel
+export const env = createEnv({
+  client: {
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
+  },
+  runtimeEnv: {
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+  },
+});
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### 3. Validate schema on build
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+next.config.ts
+
+```
+import "./src/env/server.ts";
+```
