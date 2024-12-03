@@ -9,7 +9,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   return (
-    <NextUIProvider navigate={router.push}>
+    <NextUIProvider navigate={router.push} className="h-full w-full flex flex-col">
       <ThemeProvider attribute="class">{children}</ThemeProvider>
     </NextUIProvider>
   );
