@@ -14,6 +14,7 @@ import {
 } from "@nextui-org/react";
 import { Package } from "lucide-react";
 
+import AuthButton from "./auth-button";
 import { ThemeSwitcher } from "./theme-switcher";
 
 export default function AppNavbar() {
@@ -46,25 +47,31 @@ export default function AppNavbar() {
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
         {menuItems.map((item, index) => (
           <NavbarItem key={`${item}-${index}`}>
-            <Link className="w-full" href={item.href} size="lg">
+            <Link className="w-full font-semibold" href={item.href} size="md">
               {item.label}
             </Link>
           </NavbarItem>
         ))}
+        <NavbarItem>
+          <ThemeSwitcher />
+        </NavbarItem>
+        <NavbarItem>
+          <AuthButton minimal={false} />
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarMenu>
         <NavbarMenuItem>
           <ThemeSwitcher />
         </NavbarMenuItem>
-      </NavbarContent>
-      <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
-            <Link className="w-full" href={item.href} size="lg">
+            <Link className="w-full font-semibold" href={item.href} size="md">
               {item.label}
             </Link>
           </NavbarMenuItem>
         ))}
         <NavbarMenuItem>
-          <ThemeSwitcher />
+          <AuthButton />
         </NavbarMenuItem>
       </NavbarMenu>
     </Navbar>
